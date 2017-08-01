@@ -1,5 +1,9 @@
 package helper
 
-func writeStringToFile(path string, str string) {
+func WriteStringToFile(filepath string, str string) {
+	// Open file in Read Write mode
 
+	// Write to file
+
+	// Close file
 }

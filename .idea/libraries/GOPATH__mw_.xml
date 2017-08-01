@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;mw&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../vendor" />
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../WebProject" />
+      <root url="file://$PROJECT_DIR$/../.." />
+      <root url="file://$PROJECT_DIR$/../../../mint" />
+      <root url="file://$PROJECT_DIR$/../../../goFiles" />
+      <root url="file://$PROJECT_DIR$/../../../mint_test" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../vendor" />
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../WebProject" />
+      <root url="file://$PROJECT_DIR$/../.." />
+      <root url="file://$PROJECT_DIR$/../../../mint" />
+      <root url="file://$PROJECT_DIR$/../../../goFiles" />
+      <root url="file://$PROJECT_DIR$/../../../mint_test" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>
