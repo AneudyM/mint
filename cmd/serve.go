@@ -21,8 +21,6 @@ var cmdServe = &cobra.Command{
 func servePage(cmd *cobra.Command, args []string) {
 	fmt.Println("Serving site at http://localhost:8080")
 
-
-
 	ctxt, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
