@@ -8,6 +8,7 @@
       <root url="file://$PROJECT_DIR$/../../../mint" />
       <root url="file://$PROJECT_DIR$/../../../goFiles" />
       <root url="file://$PROJECT_DIR$/../../../mint_test" />
+      <root url="file://$PROJECT_DIR$/../../../golang.org" />
     </CLASSES>
     <SOURCES>
       <root url="file://$PROJECT_DIR$/../../../vendor" />
@@ -17,6 +18,7 @@
       <root url="file://$PROJECT_DIR$/../../../mint" />
       <root url="file://$PROJECT_DIR$/../../../goFiles" />
       <root url="file://$PROJECT_DIR$/../../../mint_test" />
+      <root url="file://$PROJECT_DIR$/../../../golang.org" />
     </SOURCES>
     <excluded>
       <root url="file://$PROJECT_DIR$" />
