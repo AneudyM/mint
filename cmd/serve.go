@@ -8,6 +8,7 @@ import (
 	"context"
 	cdp "github.com/knq/chromedp"
 	"github.com/knq/chromedp/runner"
+	"time"
 )
 
 var cmdServe = &cobra.Command{
@@ -37,6 +38,7 @@ func servePage(cmd *cobra.Command, args []string) {
 	}
 
 	http.ListenAndServe(":8080", http.FileServer(http.Dir("./build")))
+
 }
 
 func init() {
@@ -47,4 +49,8 @@ func goToSite() cdp.Tasks {
 	return cdp.Tasks{
 		cdp.Navigate("localhost:8080"),
 	}
+}
+
+func myWait(){
+	time.Sleep(200*time.Second)
 }
