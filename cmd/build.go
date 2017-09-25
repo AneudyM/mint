@@ -6,38 +6,46 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strings"
 	"path/filepath"
+	"strings"
 )
 
 var cmdBuild = &cobra.Command{
-	Use: "build",
+	Use:   "build",
 	Short: "Build the project.",
-	Long: `Build the complete project and places the files in the project's /build directory`,
-	Run: cmdBuildProject,
+	Long:  `Build the complete project and places the files in the project's /build directory`,
+	Run:   cmdBuildProject,
 }
 
+var srcDir string = "src/"
 
-func cmdBuildProject(cmd *cobra.Command, args []string){
-	// Compile files in "src" directory
-	files, err := ioutil.ReadDir("src/")
+func cmdBuildProject(cmd *cobra.Command, args []string) {
+	// Read "src" directory
+	err := filepath.Walk(srcDir, printFile)
 	checkError(err)
-	for _, file := range files {
-		if file.IsDir() {
-			continue
-		}
-		sourceFile := file.Name()
-		compileHtmlFile(sourceFile)
-	}
 }
 
 func init() {
 	RootCmd.AddCommand(cmdBuild)
 }
 
+func printFile(path string, file os.FileInfo, err error) error {
+
+	/*
+		buildDir := "build"
+		if file.IsDir() {
+			if file.Name() != "src"{
+				dirName := filepath.Join(buildDir, file.Name())
+				os.Mkdir(dirName, 0666)
+			}
+		}
+	*/
+	return nil
+}
+
 func compileHtmlFile(filename string) {
 	var newString []string
-	sourcePath := filepath.Join("src/", filename)
+	sourcePath := filename
 	targetPath := filepath.Join("build/", filename)
 	// Tokenize input source file
 	fileData := readFile(sourcePath)
@@ -63,7 +71,7 @@ func compileHtmlFile(filename string) {
 			// Validate include file
 			includeFile := token.Attr[0].Val
 			if checkFile(includeFile) == false {
-				log.Fatal("Could not open include file.")
+				log.Fatal("Could not open include file. " + includeFile)
 				return
 			}
 			includeFileData := readFile(includeFile)

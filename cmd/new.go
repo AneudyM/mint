@@ -22,12 +22,12 @@ var indexContent string = `<!doctype html>
         <meta http-equiv="x-ua-compatible" content="ie=edge">
 		<title>Mint Page</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="{{main.css}}">
+		<link rel="stylesheet" href="css/main.css">
 	</head>
 	<body>
 		<h1>Hello, Mint Web!</h1>
 
-	<script src="{{main.js}}"></script>
+	<script src="js/main.js"></script>
 	</body>
 </html>
 `
@@ -37,11 +37,10 @@ type project struct {
 	buildDir    string
 	srcDir      string
 	libsDir     string
-	scssDir     string
+	cssDir      string
 	imgDir      string
 	includesDir string
 	jsDir       string
-	pagesDir    string
 }
 
 func newProject(cmd *cobra.Command, args []string) {
@@ -54,11 +53,10 @@ func newProject(cmd *cobra.Command, args []string) {
 	newProject.buildDir = newProject.projectName + "/build" // built files for publication
 	newProject.srcDir = newProject.projectName + "/src"     // Source files
 	newProject.libsDir = newProject.projectName + "/libs"   // Downloaded libraries land here
-	newProject.scssDir = newProject.srcDir + "/scss"
+	newProject.cssDir = newProject.srcDir + "/css"
 	newProject.imgDir = newProject.srcDir + "/img"
 	newProject.includesDir = newProject.srcDir + "/includes"
 	newProject.jsDir = newProject.srcDir + "/js"
-	newProject.pagesDir = newProject.srcDir + "/pages"
 	err := os.Mkdir(newProject.projectName, perm)
 	if os.IsExist(err) {
 		fmt.Println("The project " + "\"" + newProject.projectName + "\"" + " already exists.")
@@ -76,7 +74,7 @@ func newProject(cmd *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = os.MkdirAll(newProject.scssDir, perm)
+	err = os.MkdirAll(newProject.cssDir, perm)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -88,10 +86,6 @@ func newProject(cmd *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = os.MkdirAll(newProject.pagesDir, perm)
-	if err != nil {
-		log.Fatal(err)
-	}
 	err = os.MkdirAll(newProject.jsDir, perm)
 	if err != nil {
 		log.Fatal(err)
@@ -100,15 +94,15 @@ func newProject(cmd *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = os.Create(newProject.scssDir + "/main.scss")
+	_, err = os.Create(newProject.cssDir + "/main.css")
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = os.Create(newProject.pagesDir + "/default.html")
+	_, err = os.Create(newProject.srcDir + "/index.html")
 	if err != nil {
 		log.Fatal(err)
 	}
-	indexFile, err := os.OpenFile(newProject.pagesDir+"/default.html", os.O_RDWR|os.O_CREATE, 0755)
+	indexFile, err := os.OpenFile(newProject.srcDir+"/index.html", os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
 		log.Fatal(err)
 	}
