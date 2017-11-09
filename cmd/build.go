@@ -26,18 +26,18 @@ func cmdBuildProject(cmd *cobra.Command, args []string) {
 		log.Fatal("Make sure you are in the root of your project.")
 	}
 	//(2) If user is in the root of the project, then run htmlCompiler
-	filepath.Walk(srcDir, build)
+	filepath.Walk(srcDir, htmlCompiler)
 }
 
 func init() {
 	RootCmd.AddCommand(cmdBuild)
 }
 
-func build(path string, fileInfo os.FileInfo, err error) error {
+func htmlCompiler(path string, fileInfo os.FileInfo, err error) error {
 	//(1) Get the current directory's absolute path
 	cwd, _ := os.Getwd()
 	absPath := filepath.Join(cwd, path)
-	buildPath := filepath.Join(cwd, "/build")
+	buildPath := filepath.Join(cwd, "build")
 	//(2) Process files according to their extension
 	//(2.1) Get file extension if the file is not a directory
 	file, _ := os.Stat(absPath)
