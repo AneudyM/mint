@@ -1,112 +1,93 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 var cmdNewProject = &cobra.Command{
-	Use:   "new <Project Name>",
-	Short: "Creates a new Web project directory structure",
-	Long:  `Creates a new Web Project in the current directory`,
-	Run:   newProject,
+	Use:   "new <Nombre de Proyecto>",
+	Short: "Crea la estructura de un nuevo proyecto.",
+	Long: `El subcomando new crea la estructura de un proyecto Web.
+	Mint-Web automaticamente crea la estructura de directorios necesaria
+	para el proyecto.`,
+	Run: newProject,
 }
 
-var perm os.FileMode = 0755
-var indexContent string = `<!doctype html>
-<html class="no-js" lang="">
-	<head>
-		<meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-		<title>Mint Page</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="css/main.css">
-	</head>
-	<body>
-		<h1>Hello, Mint Web!</h1>
+var indexContent string =
+	`<!DOCTYPE html>
+	<html class="no-js" lang="en">
+		<head>
+			<meta charset="utf-8">
+       		<meta http-equiv="x-ua-compatible" content="ie=edge">
+			<title>Mint Page</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="stylesheet" href="css/main.css">
+		</head>
+		<body>
+			<h1>Hello, Mint Web!</h1>
 
-	<script src="js/main.js"></script>
-	</body>
-</html>
+			<script src="js/main.js"></script>
+		</body>
+	</html>
 `
 
-type project struct {
-	projectName string
-	buildDir    string
-	srcDir      string
-	libsDir     string
-	cssDir      string
-	imgDir      string
-	includesDir string
-	jsDir       string
-}
+var perm os.FileMode = os.ModePerm
 
 func newProject(cmd *cobra.Command, args []string) {
-	var newProject project
-	if len(args) <= 0 {
-		fmt.Println("You need to specify a project name.")
-		os.Exit(1)
+	if len(args) != 1 {
+		log.Fatal("No project name specified.")
 	}
-	newProject.projectName = args[0]
-	newProject.buildDir = newProject.projectName + "/build" // built files for publication
-	newProject.srcDir = newProject.projectName + "/src"     // Source files
-	newProject.libsDir = newProject.projectName + "/libs"   // Downloaded libraries land here
-	newProject.cssDir = newProject.srcDir + "/css"
-	newProject.imgDir = newProject.srcDir + "/img"
-	newProject.includesDir = newProject.srcDir + "/includes"
-	newProject.jsDir = newProject.srcDir + "/js"
-	err := os.Mkdir(newProject.projectName, perm)
-	if os.IsExist(err) {
-		fmt.Println("The project " + "\"" + newProject.projectName + "\"" + " already exists.")
-		log.Fatal(err)
-	}
-	err = os.MkdirAll(newProject.buildDir, perm)
+	projectName, err := filepath.Abs(filepath.Clean(args[0]))
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = os.MkdirAll(newProject.libsDir, perm)
+	err = os.Mkdir(projectName, perm)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Project already exists.")
 	}
-	err = os.MkdirAll(newProject.srcDir, perm)
-	if err != nil {
-		log.Fatal(err)
+	baseStructure := []string{
+		filepath.Join(projectName, "src"),
+		filepath.Join(projectName, "build"),
+		filepath.Join(projectName, "libs"),
 	}
-	err = os.MkdirAll(newProject.cssDir, perm)
-	if err != nil {
-		log.Fatal(err)
+	for _, dir := range baseStructure {
+		err = os.Mkdir(dir, perm)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-	err = os.MkdirAll(newProject.imgDir, perm)
-	if err != nil {
-		log.Fatal(err)
+	srcDir, _ := filepath.Abs(filepath.Clean(baseStructure[0]))
+	srcStructure := []string{
+		filepath.Join(srcDir, "pages"),
+		filepath.Join(srcDir, "includes"),
+		filepath.Join(srcDir, "img"),
+		filepath.Join(srcDir, "css"),
+		filepath.Join(srcDir, "js"),
 	}
-	err = os.MkdirAll(newProject.includesDir, perm)
-	if err != nil {
-		log.Fatal(err)
+	for _, dir := range srcStructure {
+		err = os.Mkdir(dir, perm)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-	err = os.MkdirAll(newProject.jsDir, perm)
-	if err != nil {
-		log.Fatal(err)
+	srcTemplates := []string{
+		filepath.Join(srcStructure[0], "index.html"),
+		filepath.Join(srcStructure[3], "style.css"),
+		filepath.Join(srcStructure[4], "main.js"),
 	}
-	_, err = os.Create(newProject.jsDir + "/main.js")
-	if err != nil {
-		log.Fatal(err)
+	println(srcTemplates[0])
+	for _, file := range srcTemplates {
+		newFile, err := os.Create(file)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if filepath.Base(file) == "index.html" {
+			newFile.WriteString(indexContent)
+		}
 	}
-	_, err = os.Create(newProject.cssDir + "/main.css")
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = os.Create(newProject.srcDir + "/index.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	indexFile, err := os.OpenFile(newProject.srcDir+"/index.html", os.O_RDWR|os.O_CREATE, 0755)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = indexFile.WriteString(indexContent)
 }
 
 func init() {
