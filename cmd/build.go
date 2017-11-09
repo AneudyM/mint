@@ -12,8 +12,9 @@ import (
 
 var cmdBuild = &cobra.Command{
 	Use:   "build",
-	Short: "Build the project.",
-	Long:  `Build the complete project and places the files in the project's /build directory`,
+	Short: "Compilar proyecto.",
+	Long:  `El subcomando build compila el proyecto completo y lo deposita en el directorio
+	"/build" en la raíz del proyecto. Puedes utilizar "mw serve" para correr el site.`,
 	Run:   cmdBuildProject,
 }
 
@@ -23,7 +24,7 @@ func cmdBuildProject(cmd *cobra.Command, args []string) {
 	//(1) Make sure the user runs the command from its project's root directory
 	_, err := os.Stat(srcDir)
 	if os.IsNotExist(err) {
-		log.Fatal("Make sure you are in the root of your project.")
+		log.Fatal("Asegurate de correr el build desde la raíz del proyecto.")
 	}
 	//(2) If user is in the root of the project, then run htmlCompiler
 	filepath.Walk(srcDir, htmlCompiler)
@@ -77,20 +78,20 @@ func buildHTMLFile(file string, target string) {
 		if token.Data == "include" {
 			// Validate attribute criteria
 			if len(token.Attr) != 1 {
-				log.Fatal("Too many attributes.")
+				log.Fatal("Has especificado más de un atributo.")
 			}
 			if token.Attr[0].Key != srcDir {
-				log.Fatal("Unrecognized", "'"+token.Attr[0].Key+"'", "attribute.")
+				log.Fatal("Atributo", "'"+token.Attr[0].Key+"'", "no reconocido.")
 			}
 			if token.Attr[0].Val == "" {
-				log.Fatal("Empty attribute 'src'")
+				log.Fatal("El atributp 'src' está vacio.")
 			}
 			includeFileName := token.Attr[0].Val
 			// Retrive include file
 			// But first make sure it exists:
 			includeFilePath := filepath.Join(cwd, srcDir, "includes", includeFileName)
 			_, err := os.Stat(includeFilePath)
-			if os.IsNotExist(err){
+			if os.IsNotExist(err) {
 				log.Fatal(err)
 			}
 			includeFileContent := readFile(includeFilePath)

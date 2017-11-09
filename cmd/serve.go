@@ -1,21 +1,21 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
+	cdp "github.com/knq/chromedp"
+	"github.com/knq/chromedp/runner"
 	"github.com/spf13/cobra"
 	"log"
 	"net/http"
-	"context"
-	cdp "github.com/knq/chromedp"
-	"github.com/knq/chromedp/runner"
 	"time"
 )
 
 var cmdServe = &cobra.Command{
 	Use:   "serve",
-	Short: "Serve the current project",
-	Long: `			Serve the page in the build directory of the current project's
-			working directory.`,
+	Short: "Sirve el proyecto en tu browser. ",
+	Long: `El subcomando serve lanza el ultimo build de tu proyecto desde el directorio "/build".
+	Mint-Web automaticamente lanza el browser predefinido.`,
 	Run: servePage,
 }
 
@@ -51,6 +51,6 @@ func goToSite() cdp.Tasks {
 	}
 }
 
-func myWait(){
-	time.Sleep(200*time.Second)
+func myWait() {
+	time.Sleep(200 * time.Second)
 }

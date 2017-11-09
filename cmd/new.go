@@ -12,12 +12,11 @@ var cmdNewProject = &cobra.Command{
 	Short: "Crea la estructura de un nuevo proyecto.",
 	Long: `El subcomando new crea la estructura de un proyecto Web.
 	Mint-Web automaticamente crea la estructura de directorios necesaria
-	para el proyecto.`,
+	para tu proyecto.`,
 	Run: newProject,
 }
 
-var indexContent string =
-	`<!DOCTYPE html>
+var indexContent string = `<!DOCTYPE html>
 	<html class="no-js" lang="en">
 		<head>
 			<meta charset="utf-8">
@@ -38,7 +37,7 @@ var perm os.FileMode = os.ModePerm
 
 func newProject(cmd *cobra.Command, args []string) {
 	if len(args) != 1 {
-		log.Fatal("No project name specified.")
+		log.Fatal("Nombre de proyecto no especificado.")
 	}
 	projectName, err := filepath.Abs(filepath.Clean(args[0]))
 	if err != nil {
@@ -46,7 +45,7 @@ func newProject(cmd *cobra.Command, args []string) {
 	}
 	err = os.Mkdir(projectName, perm)
 	if err != nil {
-		log.Fatal("Project already exists.")
+		log.Fatal("El proyecto ya existe.")
 	}
 	baseStructure := []string{
 		filepath.Join(projectName, "src"),
@@ -78,7 +77,6 @@ func newProject(cmd *cobra.Command, args []string) {
 		filepath.Join(srcStructure[3], "style.css"),
 		filepath.Join(srcStructure[4], "main.js"),
 	}
-	println(srcTemplates[0])
 	for _, file := range srcTemplates {
 		newFile, err := os.Create(file)
 		if err != nil {
