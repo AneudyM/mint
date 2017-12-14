@@ -1,4 +1,6 @@
-# mint-web
-Mint Web is a Web Front-End project builder written in Go. 
+# MintWeb
+
+MintWeb is a front-end web design aide.
+
 
 
