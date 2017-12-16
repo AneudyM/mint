@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
+	"cmd/mw/internal/base"
 	"log"
 	"os"
 	"path/filepath"
 )
 
-var cmdNewProject = &cobra.Command{
-	Use:   "new <Nombre de Proyecto>",
+var cmdNewProject = &base.Command{
+	Use:   "new [ProjectName",
 	Short: "Crea la estructura de un nuevo proyecto.",
 	Long: `El subcomando new crea la estructura de un proyecto Web.
 	Mint-Web automaticamente crea la estructura de directorios necesaria

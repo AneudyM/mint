@@ -4,3 +4,6 @@
 # Workspace Specific Directories
 bin/
 pkg/
+
+# Binaries
+mw
