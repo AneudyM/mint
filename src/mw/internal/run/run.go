@@ -4,17 +4,13 @@ import (
 	"mw/internal/cmd"
 )
 
-var cmdRun = &cmd.Command{
+var CmdRun = &cmd.Command{
 	CmdName:  "run",
-	CmdUsage: "usage: run",
-	CmdRun:   testFunction,
+	CmdUsage: "usage: mw run",
+	Run:      testFunction,
 }
 
-func init() {
-	cmdRun.CmdRun
-}
-
-func testFunction(cmd *cmd.Command, args []string) {
+func testFunction(c *cmd.Command) {
 	println("You invoked the 'run' command.")
 }
 

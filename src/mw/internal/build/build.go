@@ -1,23 +1,21 @@
 package build
 
 import (
-	"github.com/spf13/cobra"
-	"golang.org/x/net/html"
-	"io/ioutil"
-	"log"
-	"os"
-	"path/filepath"
-	"strings"
+	"fmt"
+	"mw/internal/cmd"
 )
 
-var cmdBuild = &cobra.Command{
-	Use:   "build",
-	Short: "Compilar proyecto.",
-	Long: `El subcomando build compila el proyecto completo y lo deposita en el directorio
-	"/build" en la raíz del proyecto. Puedes utilizar "mw run" para correr el site.`,
-	Run: cmdBuildProject,
+var CmdBuild = &cmd.Command{
+	CmdName:  "build",
+	CmdUsage: "usage: mw build",
+	Run:      testBuild,
 }
 
+func testBuild(c *cmd.Command) {
+	fmt.Println("You invoked the 'build' command.")
+}
+
+/*
 var srcDir string = "src"
 
 func cmdBuildProject(cmd *cobra.Command, args []string) {
@@ -121,3 +119,4 @@ func readFile(filename string) string {
 	checkError(err)
 	return string(data)
 }
+*/

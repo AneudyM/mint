@@ -16,7 +16,7 @@ type Command struct {
 	CmdFlag flag.FlagSet
 
 	// Function to run for this command
-	Run func(c *Command, args []string)
+	Run func(c *Command)
 }
 
 // List of supported commands

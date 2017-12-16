@@ -1,21 +1,21 @@
 package new
 
 import (
-	"cmd/mw/internal/base"
-	"log"
-	"os"
-	"path/filepath"
+	"fmt"
+	"mw/internal/cmd"
 )
 
-var cmdNewProject = &base.Command{
-	Use:   "new [ProjectName",
-	Short: "Crea la estructura de un nuevo proyecto.",
-	Long: `El subcomando new crea la estructura de un proyecto Web.
-	Mint-Web automaticamente crea la estructura de directorios necesaria
-	para tu proyecto.`,
-	Run: newProject,
+var CmdNew = &cmd.Command{
+	CmdName:  "new",
+	CmdUsage: "usage: mw new",
+	Run:      createProject,
 }
 
+func createProject(c *cmd.Command) {
+	fmt.Println("You invoked the 'new' command.")
+}
+
+/*
 var indexContent string = `<!DOCTYPE html>
 	<html class="no-js" lang="en">
 		<head>
@@ -36,7 +36,7 @@ var indexContent string = `<!DOCTYPE html>
 
 var perm os.FileMode = os.ModePerm
 
-func newProject(cmd *cobra.Command, args []string) {
+func newProject(c *cmd.Command, args []string) {
 	if len(args) != 1 {
 		log.Fatal("Nombre de proyecto no especificado.")
 	}
@@ -92,3 +92,4 @@ func newProject(cmd *cobra.Command, args []string) {
 func init() {
 	RootCmd.AddCommand(cmdNewProject)
 }
+*/
