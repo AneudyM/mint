@@ -7,16 +7,15 @@ import (
 	"github.com/knq/chromedp/runner"
 	"github.com/spf13/cobra"
 	"log"
+	"mw/internal/cmd"
 	"net/http"
 	"time"
 )
 
-var cmdServe = &cobra.Command{
-	Use:   "run",
-	Short: "Sirve el proyecto en tu browser. ",
-	Long: `El subcomando run lanza el ultimo build de tu proyecto desde el directorio "/build".
-	Mint-Web automaticamente lanza el browser predefinido.`,
-	Run: servePage,
+var cmdServe = &cmd.Command{
+	CmdName:  "run",
+	CmdUsage: "usage: run",
+	Run:      servePage,
 }
 
 func servePage(cmd *cobra.Command, args []string) {
