@@ -1,23 +1,24 @@
-package main
+package run
 
 import (
-	"context"
-	"fmt"
-	cdp "github.com/knq/chromedp"
-	"github.com/knq/chromedp/runner"
-	"github.com/spf13/cobra"
-	"log"
 	"mw/internal/cmd"
-	"net/http"
-	"time"
 )
 
-var cmdServe = &cmd.Command{
+var cmdRun = &cmd.Command{
 	CmdName:  "run",
 	CmdUsage: "usage: run",
-	Run:      servePage,
+	CmdRun:   testFunction,
 }
 
+func init() {
+	cmdRun.CmdRun
+}
+
+func testFunction(cmd *cmd.Command, args []string) {
+	println("You invoked the 'run' command.")
+}
+
+/*
 func servePage(cmd *cobra.Command, args []string) {
 	fmt.Println("Serving site at http://localhost:8080")
 
@@ -53,3 +54,4 @@ func goToSite() cdp.Tasks {
 func myWait() {
 	time.Sleep(200 * time.Second)
 }
+*/

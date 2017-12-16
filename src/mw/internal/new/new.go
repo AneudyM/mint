@@ -1,4 +1,4 @@
-package main
+package new
 
 import (
 	"cmd/mw/internal/base"

@@ -16,12 +16,15 @@ type Command struct {
 	CmdFlag flag.FlagSet
 
 	// Function to run for this command
-	CmdRun func(c *Command, args []string)
+	Run func(c *Command, args []string)
 }
+
+// List of supported commands
+var Commands []*Command
 
 // Name returns the name of this command.
 func (c *Command) Name() string {
-	return c.Name()
+	return c.CmdName
 }
 
 // Usage prints the single line usage for
