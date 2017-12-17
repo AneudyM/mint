@@ -10,7 +10,7 @@ var CmdRun = &cmd.Command{
 	Run:      testFunction,
 }
 
-func testFunction(c *cmd.Command) {
+func testFunction(c *cmd.Command, args []string) {
 	println("You invoked the 'run' command.")
 }
 

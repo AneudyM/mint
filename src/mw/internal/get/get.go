@@ -11,8 +11,16 @@ var CmdGet = &cmd.Command{
 	Run:      getLibrary,
 }
 
+// getLibrary is a test function
 func getLibrary(c *cmd.Command) {
 	fmt.Println("You invoked the 'get' command")
+}
+
+// GetNew is just a test as well
+// name: is the name of the file as a string
+// path: is the absolute path to the file as a string
+func GetNew(nanme string, path string) {
+
 }
 
 /*
