@@ -1,3 +1,7 @@
+/*
+	Package cmd represents a command object.
+
+*/
 package cmd
 
 import (
@@ -8,6 +12,8 @@ import (
 // Commands holds the list of all the supported commands.
 // This list is filled in main.go by referencing to it.
 var Commands []*Command
+
+var Usage func()
 
 type Command struct {
 	// Name of the command

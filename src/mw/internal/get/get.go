@@ -2,7 +2,10 @@ package get
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
 	"mw/internal/cmd"
+	"os"
 )
 
 var CmdGet = &cmd.Command{
@@ -12,7 +15,7 @@ var CmdGet = &cmd.Command{
 }
 
 // getLibrary is a test function
-func getLibrary(c *cmd.Command) {
+func getLibrary(c *cmd.Command, args []string) {
 	fmt.Println("You invoked the 'get' command")
 }
 

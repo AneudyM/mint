@@ -11,7 +11,7 @@ var CmdNew = &cmd.Command{
 	Run:      createProject,
 }
 
-func createProject(c *cmd.Command) {
+func createProject(c *cmd.Command, args []string) {
 	fmt.Println("You invoked the 'new' command.")
 }
 

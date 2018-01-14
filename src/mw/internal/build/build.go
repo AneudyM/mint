@@ -2,32 +2,39 @@ package build
 
 import (
 	"fmt"
+	"log"
 	"mw/internal/cmd"
+	"os"
+	"path/filepath"
 )
 
 var CmdBuild = &cmd.Command{
 	CmdName:  "build",
 	CmdUsage: "usage: mw build",
-	Run:      testBuild,
+	Run:      buildProject,
 }
 
-func testBuild(c *cmd.Command) {
-	fmt.Println("You invoked the 'build' command.")
+var srcDir = "src"
+
+func buildProject(c *cmd.Command, args []string) {
+	_, err := os.Stat(srcDir)
+	if os.IsNotExist(err) {
+		fmt.Println("Project's src directory not found.")
+		os.Exit(2)
+	}
+
+	err = filepath.Walk(srcDir, compile)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func compile(path string, info os.FileInfo, err error) error {
+
+	return err
 }
 
 /*
-var srcDir string = "src"
-
-func cmdBuildProject(cmd *cobra.Command, args []string) {
-	//(1) Make sure the user runs the command from its project's root directory
-	_, err := os.Stat(srcDir)
-	if os.IsNotExist(err) {
-		log.Fatal("Asegurate de correr el build desde la raíz del proyecto.")
-	}
-	//(2) If user is in the root of the project, then run htmlCompiler
-	filepath.Walk(srcDir, htmlCompiler)
-}
-
 func init() {
 	RootCmd.AddCommand(cmdBuild)
 }
@@ -38,7 +45,15 @@ func htmlCompiler(path string, fileInfo os.FileInfo, err error) error {
 	absPath := filepath.Join(cwd, path)
 	buildPath := filepath.Join(cwd, "build")
 	//(2) Process files according to their extension
-	//(2.1) Get file extension if the file is not a directory
+	//(2.1) Get file extensionfunc cmdBuildProject(cmd *cobra.Command, args []string) {
+	//(1) Make sure the user runs the command from its project's root directory
+	_, err := os.Stat(srcDir)
+	if os.IsNotExist(err) {
+		log.Fatal("Asegurate de correr el build desde la raíz del proyecto.")
+	}
+	//(2) If user is in the root of the project, then run htmlCompiler
+	filepath.Walk(srcDir, htmlCompiler)
+} if the file is not a directory
 	file, _ := os.Stat(absPath)
 	if file.IsDir() {
 		if file.Name() == "includes" {

@@ -8,6 +8,7 @@ import (
 	"mw/internal/get"
 	"mw/internal/new"
 	"mw/internal/run"
+	"os"
 )
 
 func init() {
@@ -21,6 +22,8 @@ func init() {
 
 func main() {
 
+	flag.Usage = cmd.Usage
+
 	// Parse the command-line into defined flags
 	flag.Parse()
 
@@ -29,19 +32,25 @@ func main() {
 
 	// If no command is specified print the Usage
 	if len(args) < 1 {
-		usage()
+		os.Exit(1)
 	}
 
+	if args[0] == "help" {
+		mwUsage()
+		return
+	}
 	// Evaluate CLI's arguments against list of
 	// available commands
-	for _, c := range cmd.Commands {
-		if c.CmdName == args[0] {
-			c.Run(c)
-		}
+	for _, cmd := range cmd.Commands {
+		fmt.Println(cmd)
 	}
-
 }
 
-func usage() {
+func init() {
+	cmd.Usage = mwUsage
+}
+
+func mwUsage() {
 	fmt.Println("usage: mw [command] [arguments...]")
+	os.Exit(1)
 }
