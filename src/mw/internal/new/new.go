@@ -16,13 +16,9 @@ var CmdNew = &cmd.Command{
 	Run:        createProject,
 }
 
-var srcDir = "src"
-var buildDir = "build"
-var imgDir = "img"
-var jsDir = "js"
-var cssDir = "css"
-var templatesDir = "templates"
-var fileMode os.FileMode = 0641
+var pStruct = [...]string{"src", "build", "img", "js", "css", "templates"}
+var srcDir = pStruct[0]
+var buildDir = pStruct[1]
 
 type IndexTemplate struct {
 	Title       string
@@ -73,8 +69,7 @@ func createProject(c *cmd.Command, args []string) {
 		log.Fatal(err)
 	}
 
-	srcStructure := []string{jsDir, cssDir, imgDir, templatesDir}
-	for _, dir := range srcStructure {
+	for _, dir := range pStruct[2:] {
 		err := os.Mkdir(filepath.Join(projectName, srcDir, dir), os.ModePerm)
 		if err != nil {
 			log.Fatal(err)
