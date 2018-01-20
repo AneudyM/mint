@@ -20,11 +20,6 @@ var pStruct = [...]string{"src", "build", "img", "js", "css", "templates"}
 var srcDir = pStruct[0]
 var buildDir = pStruct[1]
 
-type IndexTemplate struct {
-	Title       string
-	MintVersion string
-}
-
 const indexTemplate = `<!DOCTYPE html>
 	<html class="no-js" lang="en">
 		<head>
