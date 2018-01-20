@@ -21,21 +21,21 @@ var srcDir = pStruct[0]
 var buildDir = pStruct[1]
 
 const indexTemplate = `<!DOCTYPE html>
-	<html class="no-js" lang="en">
-		<head>
-			<meta charset="utf-8">
-       		<meta http-equiv="x-ua-compatible" content="ie=edge">
-			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<meta name="generator" content="Mint Web 0.0.2" />
-			<title>Mint Web Page</title>
-			<link rel="stylesheet" href="css/main.css">
-		</head>
-		<body>
-			<h1>Hello, Mint Web!</h1>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Mint Web 0.0.2" />
+    <title>Mint Web Page</title>
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <h1>Hello, Mint Web!</h1>
 
-			<script src="js/main.js"></script>
-		</body>
-	</html>
+    <script src="js/main.js"></script>
+  </body>
+</html>
 `
 
 func createProject(c *cmd.Command, args []string) {
