@@ -4,12 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
+
 	"mw/internal/build"
 	"mw/internal/cmd"
 	"mw/internal/get"
 	"mw/internal/new"
 	"mw/internal/run"
-	"os"
 )
 
 func init() {

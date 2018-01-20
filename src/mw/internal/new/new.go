@@ -3,9 +3,10 @@ package new
 import (
 	"fmt"
 	"log"
-	"mw/internal/cmd"
 	"os"
 	"path/filepath"
+
+	"mw/internal/cmd"
 )
 
 var CmdNew = &cmd.Command{
@@ -14,6 +15,37 @@ var CmdNew = &cmd.Command{
 	HasNoFlags: true,
 	Run:        createProject,
 }
+
+var srcDir = "src"
+var buildDir = "build"
+var imgDir = "img"
+var jsDir = "js"
+var cssDir = "css"
+var templatesDir = "templates"
+var fileMode os.FileMode = 0641
+
+type IndexTemplate struct {
+	Title       string
+	MintVersion string
+}
+
+const indexTemplate = `<!DOCTYPE html>
+	<html class="no-js" lang="en">
+		<head>
+			<meta charset="utf-8">
+       		<meta http-equiv="x-ua-compatible" content="ie=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<meta name="generator" content="Mint Web 0.0.2" />
+			<title>Mint Web Page</title>
+			<link rel="stylesheet" href="css/main.css">
+		</head>
+		<body>
+			<h1>Hello, Mint Web!</h1>
+
+			<script src="js/main.js"></script>
+		</body>
+	</html>
+`
 
 func createProject(c *cmd.Command, args []string) {
 	if len(args) == 0 {
@@ -31,100 +63,32 @@ func createProject(c *cmd.Command, args []string) {
 		log.Fatal(err)
 	}
 
-	err = os.Mkdir(filepath.Join(projectName, "src"), os.ModePerm)
+	err = os.Mkdir(filepath.Join(projectName, srcDir), os.ModePerm)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = os.Mkdir(filepath.Join(projectName, "build"), os.ModePerm)
+	err = os.Mkdir(filepath.Join(projectName, buildDir), os.ModePerm)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	srcStructure := []string{"js", "css", "img"}
+	srcStructure := []string{jsDir, cssDir, imgDir, templatesDir}
 	for _, dir := range srcStructure {
-		err := os.Mkdir(filepath.Join(projectName, "src", dir), os.ModePerm)
+		err := os.Mkdir(filepath.Join(projectName, srcDir, dir), os.ModePerm)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
-}
 
-/*
-var indexContent string = `<!DOCTYPE html>
-	<html class="no-js" lang="en">
-		<head>
-			<meta charset="utf-8">
-       		<meta http-equiv="x-ua-compatible" content="ie=edge">
-			<title>Mint Page</title>
-			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<meta name="generator" content="MintWeb 0.0.1" />
-			<link rel="stylesheet" href="css/main.css">
-		</head>
-		<body>
-			<h1>Hello, Mint Web!</h1>
-
-			<script src="js/main.js"></script>
-		</body>
-	</html>
-`
-
-var perm os.FileMode = os.ModePerm
-
-func newProject(c *cmd.Command, args []string) {
-	if len(args) != 1 {
-		log.Fatal("Nombre de proyecto no especificado.")
-	}
-	projectName, err := filepath.Abs(filepath.Clean(args[0]))
+	file := filepath.Join(projectName, srcDir, "index.html")
+	cf, err := os.Create(file)
+	defer cf.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = os.Mkdir(projectName, perm)
+	_, err = cf.WriteString(indexTemplate)
 	if err != nil {
-		log.Fatal("El proyecto ya existe.")
-	}
-	baseStructure := []string{
-		filepath.Join(projectName, "src"),
-		filepath.Join(projectName, "build"),
-		filepath.Join(projectName, "libs"),
-	}
-	for _, dir := range baseStructure {
-		err = os.Mkdir(dir, perm)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	srcDir, _ := filepath.Abs(filepath.Clean(baseStructure[0]))
-	srcStructure := []string{
-		filepath.Join(srcDir, "pages"),
-		filepath.Join(srcDir, "includes"),
-		filepath.Join(srcDir, "img"),
-		filepath.Join(srcDir, "css"),
-		filepath.Join(srcDir, "js"),
-	}
-	for _, dir := range srcStructure {
-		err = os.Mkdir(dir, perm)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	srcTemplates := []string{
-		filepath.Join(srcStructure[0], "index.html"),
-		filepath.Join(srcStructure[3], "style.css"),
-		filepath.Join(srcStructure[4], "main.js"),
-	}
-	for _, file := range srcTemplates {
-		newFile, err := os.Create(file)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if filepath.Base(file) == "index.html" {
-			newFile.WriteString(indexContent)
-		}
+		log.Fatal(err)
 	}
 }
-
-func init() {
-	RootCmd.AddCommand(cmdNewProject)
-}
-*/
