@@ -2,17 +2,52 @@ package new
 
 import (
 	"fmt"
+	"log"
 	"mw/internal/cmd"
+	"os"
+	"path/filepath"
 )
 
 var CmdNew = &cmd.Command{
-	CmdName:  "new",
-	CmdUsage: "usage: mw new",
-	Run:      createProject,
+	CmdName:    "new",
+	CmdUsage:   "usage: mw new <project-name>",
+	HasNoFlags: true,
+	Run:        createProject,
 }
 
 func createProject(c *cmd.Command, args []string) {
-	fmt.Println("You invoked the 'new' command.")
+	if len(args) == 0 {
+		log.Fatalf("No project name specified.")
+	}
+
+	if len(args) > 1 {
+		fmt.Printf(c.CmdUsage + "\n")
+		os.Exit(2)
+	}
+
+	projectName := args[0]
+	err := os.Mkdir(projectName, os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.Mkdir(filepath.Join(projectName, "src"), os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.Mkdir(filepath.Join(projectName, "build"), os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	srcStructure := []string{"js", "css", "img"}
+	for _, dir := range srcStructure {
+		err := os.Mkdir(filepath.Join(projectName, "src", dir), os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 /*

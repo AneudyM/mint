@@ -2,10 +2,11 @@ package get
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
+
 	"mw/internal/cmd"
-	"os"
+	//"io/ioutil"
+	//"log"
+	//"os"
 )
 
 var CmdGet = &cmd.Command{
@@ -16,7 +17,9 @@ var CmdGet = &cmd.Command{
 
 // getLibrary is a test function
 func getLibrary(c *cmd.Command, args []string) {
+	fmt.Println("This command needs implementation:")
 	fmt.Println("You invoked the 'get' command")
+	fmt.Println("With arguments", args)
 }
 
 // GetNew is just a test as well

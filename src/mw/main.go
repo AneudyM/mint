@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"mw/internal/build"
 	"mw/internal/cmd"
 	"mw/internal/get"
@@ -21,29 +22,35 @@ func init() {
 }
 
 func main() {
-
 	flag.Usage = cmd.Usage
 
-	// Parse the command-line into defined flags
 	flag.Parse()
 
-	// Store the CLI args
 	args := flag.Args()
 
-	// If no command is specified print the Usage
 	if len(args) < 1 {
-		os.Exit(1)
+		mwUsage()
+		os.Exit(2)
 	}
 
-	if args[0] == "help" {
-		mwUsage()
-		return
+	subCommand := args[0]
+
+	for _, c := range cmd.Commands {
+		if c.CmdName == subCommand {
+			if c.HasNoFlags {
+				args = args[1:]
+			} else {
+				c.CmdFlag.Parse(args[1:])
+				args = c.CmdFlag.Args()
+			}
+			c.Run(c, args)
+			os.Exit(0)
+			return
+		}
 	}
-	// Evaluate CLI's arguments against list of
-	// available commands
-	for _, cmd := range cmd.Commands {
-		fmt.Println(cmd)
-	}
+
+	log.Printf("Unknown command '%s'", subCommand)
+	os.Exit(2)
 }
 
 func init() {

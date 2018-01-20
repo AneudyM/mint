@@ -1,7 +1,6 @@
 package build
 
 import (
-	"fmt"
 	"log"
 	"mw/internal/cmd"
 	"os"
@@ -9,18 +8,31 @@ import (
 )
 
 var CmdBuild = &cmd.Command{
-	CmdName:  "build",
-	CmdUsage: "usage: mw build",
-	Run:      buildProject,
+	CmdName:    "build",
+	CmdUsage:   "usage: mw build [build-path]",
+	HasNoFlags: true,
+	Run:        buildProject,
 }
 
 var srcDir = "src"
 
+// buildProject builds the whole project into the build directory
 func buildProject(c *cmd.Command, args []string) {
+	if len(args) == 0 {
+		args = []string{srcDir}
+	}
+	if len(args) > 1 {
+		log.Fatal(c.CmdUsage)
+	}
+
+	buildDir := args[0]
+	if _, err := os.Stat(buildDir); os.IsNotExist(err) {
+		log.Fatalf("error: %s", err)
+	}
+
 	_, err := os.Stat(srcDir)
 	if os.IsNotExist(err) {
-		fmt.Println("Project's src directory not found.")
-		os.Exit(2)
+		log.Fatalf("Project's '%s' directory not found.", srcDir)
 	}
 
 	err = filepath.Walk(srcDir, compile)
@@ -30,7 +42,7 @@ func buildProject(c *cmd.Command, args []string) {
 }
 
 func compile(path string, info os.FileInfo, err error) error {
-
+	info.Name()
 	return err
 }
 
