@@ -2,37 +2,58 @@ package build
 
 import (
 	"log"
-	"mw/internal/cmd"
+	"mw/internal/base"
 	"os"
 	"path/filepath"
+
+	"mw/internal/cmd"
 )
+
+// Foreseeable issues that need to be handled:
+// User deletes the .mwrc file
+// build directory does not exist
+// src directory does not exist
+// directory permissions were changed
 
 var CmdBuild = &cmd.Command{
 	CmdName:    "build",
-	CmdUsage:   "usage: mw build [build-path]",
+	CmdUsage:   "usage: mw build [external_directory]",
 	HasNoFlags: true,
-	Run:        buildProject,
+	Run:        buildMain,
 }
 
-var srcDir = "src"
+var srcDir, _ = filepath.Abs(base.MWROOT[base.DIR_SRC])
 
 // buildProject builds the whole project into the build directory
-func buildProject(c *cmd.Command, args []string) {
-	if len(args) == 0 {
-		args = []string{srcDir}
+func buildMain(c *cmd.Command, args []string) {
+	if !base.InRoot() {
+		log.Fatal("not in project's root or src file does not exist")
 	}
+
+	cwd, _ := os.Getwd()
+	if len(args) == 0 {
+		args = []string{filepath.Join(cwd, base.MWROOT[base.DIR_BUILD])}
+	}
+
 	if len(args) > 1 {
 		log.Fatal(c.CmdUsage)
 	}
 
-	buildDir := args[0]
+	// Prevent project's source directory from being overwritten by build
+	externalDirectory, _ := filepath.Abs(args[0])
+	localSrcDirectory := filepath.Join(cwd, base.MWROOT[base.DIR_SRC])
+	if externalDirectory == localSrcDirectory {
+		log.Fatal("operation not permitted. Cannot overwrite src directory")
+	}
+
+	buildDir := externalDirectory
 	if _, err := os.Stat(buildDir); os.IsNotExist(err) {
-		log.Fatalf("error: %s", err)
+		log.Fatalf("%s", err)
 	}
 
 	_, err := os.Stat(srcDir)
 	if os.IsNotExist(err) {
-		log.Fatalf("Project's '%s' directory not found.", srcDir)
+		log.Fatalf("%s", err)
 	}
 
 	err = filepath.Walk(srcDir, compile)
@@ -42,8 +63,42 @@ func buildProject(c *cmd.Command, args []string) {
 }
 
 func compile(path string, info os.FileInfo, err error) error {
-	info.Name()
+	var filetype string
+	if !info.IsDir() {
+		filetype = filepath.Ext(path)
+	}
+
+	switch filetype {
+	case ".html":
+		compileHTML(path)
+	case ".tmpl":
+		compileTMPL(path)
+	case ".js":
+		compileJS(path)
+	case ".css":
+		compileCSS(path)
+	default:
+		println(path)
+		return nil
+	}
+
 	return err
+}
+
+func compileHTML(f string) {
+	println("processing HTML files.")
+}
+
+func compileCSS(f string) {
+	println("processing CSS files.")
+}
+
+func compileJS(f string) {
+	println("processing JS files.")
+}
+
+func compileTMPL(f string) {
+	println("processing TMPL files.")
 }
 
 /*

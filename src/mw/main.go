@@ -11,7 +11,11 @@ import (
 	"mw/internal/get"
 	"mw/internal/new"
 	"mw/internal/run"
+	// test command for testing experimental stuff
+	"mw/internal/test"
 )
+
+// Review all errors and reserve graceful terminations of for main
 
 func init() {
 	cmd.Commands = []*cmd.Command{
@@ -19,6 +23,7 @@ func init() {
 		build.CmdBuild,
 		get.CmdGet,
 		new.CmdNew,
+		test.CmdTest,
 	}
 }
 
@@ -58,6 +63,7 @@ func init() {
 	cmd.Usage = mwUsage
 }
 
+// mwUsage shows the base command's usage.
 func mwUsage() {
 	fmt.Println("usage: mw [command] [arguments...]")
 	os.Exit(1)

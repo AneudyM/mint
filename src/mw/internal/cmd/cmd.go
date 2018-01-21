@@ -1,6 +1,5 @@
 /*
 	Package cmd represents a command object.
-
 */
 package cmd
 
