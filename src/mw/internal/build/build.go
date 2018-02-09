@@ -1,35 +1,107 @@
 package build
 
 import (
-	"github.com/spf13/cobra"
-	"golang.org/x/net/html"
-	"io/ioutil"
 	"log"
+	"mw/internal/base"
 	"os"
 	"path/filepath"
-	"strings"
+
+	"mw/internal/cmd"
 )
 
-var cmdBuild = &cobra.Command{
-	Use:   "build",
-	Short: "Compilar proyecto.",
-	Long: `El subcomando build compila el proyecto completo y lo deposita en el directorio
-	"/build" en la raíz del proyecto. Puedes utilizar "mw run" para correr el site.`,
-	Run: cmdBuildProject,
+// Foreseeable issues that need to be handled:
+// User deletes the .mwrc file
+// build directory does not exist
+// src directory does not exist
+// directory permissions were changed
+
+var CmdBuild = &cmd.Command{
+	CmdName:    "build",
+	CmdUsage:   "usage: mw build [external_directory]",
+	HasNoFlags: true,
+	Run:        buildMain,
 }
 
-var srcDir string = "src"
+var srcDir, _ = filepath.Abs(base.MWROOT[base.DIR_SRC])
 
-func cmdBuildProject(cmd *cobra.Command, args []string) {
-	//(1) Make sure the user runs the command from its project's root directory
+// buildProject builds the whole project into the build directory
+func buildMain(c *cmd.Command, args []string) {
+	if !base.InRoot() {
+		log.Fatal("not in project's root or src file does not exist")
+	}
+
+	cwd, _ := os.Getwd()
+	if len(args) == 0 {
+		args = []string{filepath.Join(cwd, base.MWROOT[base.DIR_BUILD])}
+	}
+
+	if len(args) > 1 {
+		log.Fatal(c.CmdUsage)
+	}
+
+	// Prevent project's source directory from being overwritten by build
+	externalDirectory, _ := filepath.Abs(args[0])
+	localSrcDirectory := filepath.Join(cwd, base.MWROOT[base.DIR_SRC])
+	if externalDirectory == localSrcDirectory {
+		log.Fatal("operation not permitted. Cannot overwrite src directory")
+	}
+
+	buildDir := externalDirectory
+	if _, err := os.Stat(buildDir); os.IsNotExist(err) {
+		log.Fatalf("%s", err)
+	}
+
 	_, err := os.Stat(srcDir)
 	if os.IsNotExist(err) {
-		log.Fatal("Asegurate de correr el build desde la raíz del proyecto.")
+		log.Fatalf("%s", err)
 	}
-	//(2) If user is in the root of the project, then run htmlCompiler
-	filepath.Walk(srcDir, htmlCompiler)
+
+	err = filepath.Walk(srcDir, compile)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
+func compile(path string, info os.FileInfo, err error) error {
+	var filetype string
+	if !info.IsDir() {
+		filetype = filepath.Ext(path)
+	}
+
+	switch filetype {
+	case ".html":
+		compileHTML(path)
+	case ".tmpl":
+		compileTMPL(path)
+	case ".js":
+		compileJS(path)
+	case ".css":
+		compileCSS(path)
+	default:
+		println(path)
+		return nil
+	}
+
+	return err
+}
+
+func compileHTML(f string) {
+	println("processing HTML files.")
+}
+
+func compileCSS(f string) {
+	println("processing CSS files.")
+}
+
+func compileJS(f string) {
+	println("processing JS files.")
+}
+
+func compileTMPL(f string) {
+	println("processing TMPL files.")
+}
+
+/*
 func init() {
 	RootCmd.AddCommand(cmdBuild)
 }
@@ -40,7 +112,15 @@ func htmlCompiler(path string, fileInfo os.FileInfo, err error) error {
 	absPath := filepath.Join(cwd, path)
 	buildPath := filepath.Join(cwd, "build")
 	//(2) Process files according to their extension
-	//(2.1) Get file extension if the file is not a directory
+	//(2.1) Get file extensionfunc cmdBuildProject(cmd *cobra.Command, args []string) {
+	//(1) Make sure the user runs the command from its project's root directory
+	_, err := os.Stat(srcDir)
+	if os.IsNotExist(err) {
+		log.Fatal("Asegurate de correr el build desde la raíz del proyecto.")
+	}
+	//(2) If user is in the root of the project, then run htmlCompiler
+	filepath.Walk(srcDir, htmlCompiler)
+} if the file is not a directory
 	file, _ := os.Stat(absPath)
 	if file.IsDir() {
 		if file.Name() == "includes" {
@@ -121,3 +201,4 @@ func readFile(filename string) string {
 	checkError(err)
 	return string(data)
 }
+*/

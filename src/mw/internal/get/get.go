@@ -1,21 +1,35 @@
-package main
+package get
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
-	"io/ioutil"
-	"log"
-	"os"
+
+	"mw/internal/cmd"
+	//"io/ioutil"
+	//"log"
+	//"os"
 )
 
-var cmdGet = &cobra.Command{
-	Use:   "get <Library Name>",
-	Short: "Gets a dependency library remotely",
-	Long: `Download a dependency library for your project
-from the NPM registry.`,
-	Run: cmdGetLibrary,
+var CmdGet = &cmd.Command{
+	CmdName:  "get",
+	CmdUsage: "usage: mw get [library]",
+	Run:      getLibrary,
 }
 
+// getLibrary is a test function
+func getLibrary(c *cmd.Command, args []string) {
+	fmt.Println("This command needs implementation:")
+	fmt.Println("You invoked the 'get' command")
+	fmt.Println("With arguments", args)
+}
+
+// GetNew is just a test as well
+// name: is the name of the file as a string
+// path: is the absolute path to the file as a string
+func GetNew(nanme string, path string) {
+
+}
+
+/*
 func cmdGetLibrary(cmd *cobra.Command, args []string) {
 	if len(args) <= 0 {
 		fmt.Println("You need to specify a project name.")
@@ -37,3 +51,4 @@ func cmdGetLibrary(cmd *cobra.Command, args []string) {
 func init() {
 	RootCmd.AddCommand(cmdGet)
 }
+*/
