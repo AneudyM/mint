@@ -4,6 +4,7 @@
 # Workspace Specific Directories
 bin/
 pkg/
+vendor/
 
 # Binaries
 mw
